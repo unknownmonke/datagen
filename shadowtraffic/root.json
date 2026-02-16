@@ -1,0 +1,27 @@
+{
+    "generators": [
+        {
+            "_gen": "loadJsonFile",
+            "file": "/home/generators/orders.json"
+        },
+        {
+            "_gen": "loadJsonFile",
+            "file": "/home/generators/inventory.json"
+        },
+        {
+            "_gen": "loadJsonFile",
+            "file": "/home/generators/transactions.json"
+        }
+    ],
+    "schedule": {
+        "stages": [
+            {
+                "generators": [ "transactions"]
+            }
+        ]
+    },
+    "connections": {
+        "_gen": "loadJsonFile",
+        "file": "/home/connections/connections.json"
+    }
+}

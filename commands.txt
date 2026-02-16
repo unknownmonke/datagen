@@ -1,0 +1,10 @@
+docker compose up --build -d
+docker compose up -d kafka-cluster
+
+docker-compose logs
+
+docker compose run sql-client
+
+docker compose down -v --remove-orphans
+
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server kafka-cluster:29092 --from-beginning --topic transactions

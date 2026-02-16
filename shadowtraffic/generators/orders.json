@@ -1,0 +1,29 @@
+{
+    "connection": "kafka",
+    "topic": "orders",
+    "name": "orders",
+    "value": {
+        "orderId": {
+            "_gen": "uuid"
+        },
+        "productName": {
+            "_gen": "string",
+            "expr": "#{Commerce.productName}"
+        },
+        "quantity": {
+            "_gen": "uniformDistribution",
+            "bounds": [0, 20],
+            "decimals": 0
+        },
+        "price": {
+            "_gen": "string",
+            "expr": "#{Commerce.price}"
+        },
+        "timestamp": {
+            "_gen": "now"
+        }
+    },
+    "localConfigs": {
+        "throttleMs": 1000
+    }
+}

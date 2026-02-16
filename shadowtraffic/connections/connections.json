@@ -1,0 +1,14 @@
+{
+    "kafka" : {
+        "kind": "kafka",
+        "topicPolicy": {
+            "policy": "create"
+        },
+        "producerConfigs": {
+            "bootstrap.servers": "localhost:9092",
+            "security.protocol": "PLAINTEXT",
+            "key.serializer": "io.shadowtraffic.kafka.serdes.JsonSerializer",
+            "value.serializer": "io.shadowtraffic.kafka.serdes.JsonSerializer"
+        }
+    }
+}

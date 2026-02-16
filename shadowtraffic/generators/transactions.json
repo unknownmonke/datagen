@@ -1,0 +1,84 @@
+{
+    "connection": "kafka",
+    "topic": "transactions",
+    "name": "transactions",
+    "vars": {
+        "stock_initial": {
+            "_gen": "oneOf",
+            "choices": {
+                "_gen": "loadJsonFile",
+                "file": "/home/data/stocks-initial.json"
+            }
+        },
+        "price_change": {
+            "_gen": "normalDistribution",
+            "mean": 0,
+            "sd": 0.5,
+            "clamp": [-1, 1],
+            "decimals": 4
+        }
+    },
+    "key": {
+        "_gen": "var",
+        "var": "stock_initial",
+        "path": ["ticker"]
+    },
+    "value": {
+        "id": {
+            "_gen": "uuid"
+        },
+        "ticker": {
+            "_gen": "var",
+            "var": "stock_initial",
+            "path": ["ticker"]
+        },
+        "quantity": {
+            "_gen": "uniformDistribution",
+            "bounds": [0, 200],
+            "decimals": 0
+        },
+        "timestamp": {
+            "_gen": "now"
+        }
+    },
+    "stateMachine": {
+        "_gen": "stateMachine",
+        "initial": "start",
+        "transitions": {
+            "start": "update",
+            "update": "update"
+        },
+        "states": {
+            "start": {
+                "value": {
+                    "price": {
+                        "_gen": "var",
+                        "var": "stock_initial",
+                        "path": ["price"]
+                    }
+                }
+            },
+            "update": {
+                "value": {
+                    "price": {
+                        "_gen": "multiply",
+                        "args": [
+                            {
+                                "_gen": "math",
+                                "expr": "1 + price_change * 0.01"
+                            },
+                            {
+                                "_gen": "previousEvent",
+                                "path": [ "value", "price" ]
+                            }
+                        ],
+                        "decimals": 2
+                    }
+                }
+            }
+        }
+    },
+    "localConfigs": {
+        "throttleMs": 1000
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "connection": "kafka",
+    "topic": "inventory",
+    "name": "inventory",
+    "value": {
+        "productId": {
+            "_gen": "uuid"
+        },
+        "productName": {
+            "_gen": "string",
+            "expr": "#{Commerce.productName}"
+        },
+        "quantity": {
+            "_gen": "uniformDistribution",
+            "bounds": [0, 200],
+            "decimals": 0
+        },
+        "price": {
+            "_gen": "string",
+            "expr": "#{Commerce.price}"
+        },
+        "vendor": {
+            "_gen": "string",
+            "expr": "#{Commerce.vendor}"
+        },
+        "timestamp": {
+            "_gen": "now"
+        }
+    },
+    "localConfigs": {
+        "throttleMs": 2000
+    }
+}
