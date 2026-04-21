@@ -17,38 +17,16 @@ This repository contains :
 
 - A [ShadowTraffic](https://docs.shadowtraffic.io/overview/) setup to generate complex infinite data for streaming applications.
 
+- `.env` centralizes versions to use in Dockerfile and docker compose.
+
 <br>
 
-Notes on Flink deployment :
-
-- **Application mode** :
-
-    - Boots a cluster for each job, destroyed after job finishes.
-
-- [**Session mode**](https://nightlies.apache.org/flink/flink-docs-stable/docs/deployment/resource-providers/standalone/docker/#session-mode-1) :
-
-    - Boots a long-running cluster that can accept multiple jobs and not tied to a particular job.
+*Notes on Flink deployment* :
 
 - Flink is deployed in session mode.
 
 - The SQL Kafka connector and data generation tool need to be fetched and made available to both job and task managers in `/opt/flink/lib`.
 
-<br>
-
-Notes on `ARG` interactions in Dockerfile :
-
-- `FROM` instructions support variables that are declared by any `ARG` instructions that occur **before the first** `FROM`.
-
-- An `ARG` declared before a `FROM` is outside the build stage, so it can't be used in any instruction after.
-
-- To use the default value of an `ARG` declared before the first `FROM` use an `ARG` instruction without a value inside of a build stage :
-
-    ``` Dockerfile
-    ARG VERSION=latest
-    FROM busybox:$VERSION
-    ARG VERSION
-    RUN echo $VERSION > image_version
-    ```
 <br>
 
 ## Generating data with ShadowTraffic
@@ -79,5 +57,5 @@ Notes on `ARG` interactions in Dockerfile :
 ### License
 
 - Free trial license is fetched from example repository, valid for 30 days and rotated regularly.
-- Must be fetched manually for now.
-- `.env` regoups versions & license URL.
+
+- Must be fetched manually at [this URL](https://raw.githubusercontent.com/ShadowTraffic/shadowtraffic-examples/master/free-trial-license-docker.env).
