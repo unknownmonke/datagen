@@ -35,5 +35,11 @@ docker exec -it -w "/opt/kafka/bin" kafka-cluster bash
 # Lauch a producer perf test :
 ./kafka-producer-perf-test.sh --throughput -1 --topic test-perf --num-records 1000000 --record-size 1000 --producer-props bootstrap.servers=kafka-cluster:29092 --print-metrics
 
+# Lauch a consumer perf test :
+./kafka-consumer-perf-test.sh --topic test-perf --fetch-size 1000 --messages 1000000 --bootstrap-server kafka-cluster:29092 --print-metrics
+
 # Execute the producer perf test script :
 docker exec -w "/home/logs" kafka-cluster sh -c "./producer.sh"
+
+# Execute the consumer perf test script :
+docker exec -w "/home/logs" kafka-cluster sh -c "./consumer.sh"

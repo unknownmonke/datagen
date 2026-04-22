@@ -12,9 +12,9 @@ TOPIC="test-perf"
 
 TIMESTAMP=$(date -u +"%F_%H%M%S")
 
-LOG_FILE="${LOG_DIR}/producer-test-${TIMESTAMP}.log"
+LOG_FILE="${LOG_DIR}/test-producer-${TIMESTAMP}.log"
 
-echo "Running producer perf test with params : throughput=$THROUGHPUT, record size=$RECORD_SIZE, num records=$NUM_RECORDS"
+echo "Running producer perf test with params : throughput=$THROUGHPUT, record size=$RECORD_SIZE, num records=$NUM_RECORDS, topic=$TOPIC"
 
 ${KAFKA_ROOT}/bin/kafka-producer-perf-test.sh \
     --throughput "$THROUGHPUT" \

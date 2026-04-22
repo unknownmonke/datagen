@@ -84,7 +84,7 @@ This repository contains :
 
 - Output is logged into a log file with timestamp to be analysed :
 
-    - `[producer,consumer]-test-yyyy-mm-dd_hhmmss.log`.
+    - `test-[producer,consumer]-yyyy-mm-dd_hhmmss.log`.
     - Example file included.
 
 - Can **tune performances** by editing `producer.properties` and `consumer.properties`.
@@ -122,8 +122,48 @@ This repository contains :
 
     ``` bash
     D:\projects\datagen> docker exec -w "/home/logs" kafka-cluster sh -c "./producer.sh"
-    Running producer perf test with params : throughput=-1, record size=100, num records=1000000
-    Saved to /home/logs/producer-test-2026-04-21_214750.log
+    Running producer perf test with params : throughput=-1, record size=100, num records=1000000, topic=test-perf
+    Saved to /home/logs/test-producer-2026-04-21_214750.log
+    ----------------------------------------
+    ```
+
+- Find result in `/kafka-performance-tests` directory.
+
+#
+### Consumer perf test walkthrough
+
+- Launch cluster :
+
+    ``` bash
+    docker compose up -d kafka-cluster
+    ```
+
+- Specify an existing topic with data in `consumer.sh` :
+
+    ``` bash
+    TOPIC="test-perf"
+    ```
+
+- Tune consumer configuration :
+
+    ``` properties
+    auto.offset.reset=earliest
+    max.poll.interval.ms=300000
+    max.poll.records=500
+    ...
+    ```
+
+- Execute script :
+
+    ``` bash
+    docker exec -w "/home/logs" kafka-cluster sh -c "./consumer.sh"
+    ```
+    *Ex :*
+
+    ``` bash
+    PS D:\projects\datagen> docker exec -w "/home/logs" kafka-cluster sh -c "./consumer.sh"                                                                                         
+    Running consumer perf test with params : fetch size=100, messages=1000000, topic=test-perf
+    Saved to /home/logs/test-consumer-2026-04-22_102040.log
     ----------------------------------------
     ```
 
