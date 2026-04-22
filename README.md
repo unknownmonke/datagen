@@ -1,7 +1,10 @@
 # Data generation for streaming applications
 
+**Features** :
+
 - Setup for streaming data generation.
 - Quick setup for Kafka and Flink for testing.
+- Performance testing for Kafka.
 
 <br>
 
@@ -17,7 +20,7 @@ This repository contains :
 
 - A [ShadowTraffic](https://docs.shadowtraffic.io/overview/) setup to generate complex infinite data for streaming applications.
 
-- `.env` centralizes versions to use in Dockerfile and docker compose.
+- A setup to export **performance reports** for Kafka using `kafka-producer-perf-test` and `kafka-consumer-perf-test` CLI.
 
 <br>
 
@@ -29,7 +32,13 @@ This repository contains :
 
 <br>
 
-## Generating data with ShadowTraffic
+*Details :*
+
+- `.env` centralizes versions to use in Dockerfile and docker compose.
+
+<br>
+
+## Data generation with ShadowTraffic
 
 - `/shadowtraffic/connections/connections.json` :
 
@@ -59,3 +68,63 @@ This repository contains :
 - Free trial license is fetched from example repository, valid for 30 days and rotated regularly.
 
 - Must be fetched manually at [this URL](https://raw.githubusercontent.com/ShadowTraffic/shadowtraffic-examples/master/free-trial-license-docker.env).
+
+<br>
+
+## Kafka Performance Tests
+
+- Uses `kafka-producer-perf-test` and `kafka-consumer-perf-test` CLI to stress-test the cluster.
+
+- [Source document with examples and details.](https://github.com/ableasdale/kafka-producer-perf-test-walkthrough/blob/main/README.md)
+
+- `/kafka-performance-tests` :
+
+    - Contains scripts to launch in the container.
+    - Run test command with specified **params** and **configuration**.
+
+- Output is logged into a log file with timestamp to be analysed :
+
+    - `[producer,consumer]-test-yyyy-mm-dd_hhmmss.log`.
+    - Example file included.
+
+- Can **tune performances** by editing `producer.properties` and `consumer.properties`.
+
+#
+### Producer perf test walkthrough
+
+- Launch cluster :
+
+    ``` bash
+    docker compose up -d kafka-cluster
+    ```
+
+- Create topic :
+
+    ``` bash
+    docker exec -w "/opt/kafka/bin" kafka-cluster sh -c "./kafka-topics.sh --bootstrap-server kafka-cluster:29092 --topic test-perf --create --partitions 5"
+    ```
+
+- Tune producer configuration :
+
+    ``` properties
+    bootstrap.servers=kafka-cluster:29092
+    linger.ms=100
+    batch.size=32768
+    ...
+    ```
+
+- Execute script :
+
+    ``` bash
+    docker exec -w "/home/logs" kafka-cluster sh -c "./producer.sh"
+    ```
+    *Ex :*
+
+    ``` bash
+    D:\projects\datagen> docker exec -w "/home/logs" kafka-cluster sh -c "./producer.sh"
+    Running producer perf test with params : throughput=-1, record size=100, num records=1000000
+    Saved to /home/logs/producer-test-2026-04-21_214750.log
+    ----------------------------------------
+    ```
+
+- Find result in `/kafka-performance-tests` directory.
